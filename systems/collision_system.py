@@ -1,14 +1,14 @@
 from events.events import CollisionEvent
-from filters.filter import filter_entities
-from components.transform_component import TransformComponents
+from filters.filter import ComponentFilter, EventFilter
+from components.transform_component import TransformComponent
 from components.collistion_component import CollisionComponent
 
 
 def pair_collision(first_entity, second_entity):
-    position1 = first_entity[0].position
-    position2 = second_entity[0].position
-    size1 = first_entity[1].size
-    size2 = second_entity[2].size
+    position1 = first_entity.components[0].position
+    position2 = second_entity.components[0].position
+    size1 = first_entity.components[1].size
+    size2 = second_entity.components[1].size
     collide = []
 
     for i in range(len(position1)):  # Go throw all directions
@@ -21,17 +21,21 @@ def pair_collision(first_entity, second_entity):
 
 
 class CollisionSystem:
-    def __init__(self, events):
-        self.__entities = filter_entities(
-            events,
-            [TransformComponents, CollisionComponent]
+    def __init__(self, entities, events):
+        self.__entities = ComponentFilter(
+            entities,
+            [TransformComponent, CollisionComponent]
         )
         self.__events = events
 
     def update(self):
+        ids = []
         for entity in self.__entities:
             for entity2 in self.__entities:
-                if entity == entity:
+                # Искллючаем повторное добавление обной пары объектов
+                if entity.id == entity2.id or [entity2.id, entity.id] in ids:
                     continue
                 if pair_collision(entity, entity2):
-                    self.__events.append(CollisionEvent([entity, entity2]))
+                    ids.append([entity.id, entity2.id])
+        for x in ids:
+            self.__events.append(CollisionEvent([x[0], x[1]]))

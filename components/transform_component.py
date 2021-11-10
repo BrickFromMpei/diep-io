@@ -1,4 +1,4 @@
-class TransformComponents:
+class TransformComponent:
     def __init__(self, position):
         self.__position = position
 

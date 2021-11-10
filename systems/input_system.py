@@ -1,24 +1,29 @@
 import pygame
 from events.events import MoveEvent
-from filters.filter import filter_entities
+from filters.filter import ComponentFilter, EventFilter
 from components.input_component import InputComponent
 
 
 class InputSystem:
-    def __init__(self, events, entities):
+    def __init__(self, entities, events):
         self.__running = True
         self.__events = events
-        self.__entity = filter_entities(
+        self.__entities = ComponentFilter(
             entities,
             [InputComponent]
-        )[0]
+        )
 
     def update(self):
-        while self.__running:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_LEFT]:
-                self.__events.append(MoveEvent(self.__entity.id, [1, 0]))
-            pygame.event.pump()
-
-    def stop(self):
-        self.__running = False
+        direction = [0, 0]
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            direction[0] -= 1
+        if keys[pygame.K_RIGHT]:
+            direction[0] += 1
+        if keys[pygame.K_UP]:
+            direction[1] -= 1
+        if keys[pygame.K_DOWN]:
+            direction[1] += 1
+        if direction != [0, 0]:
+            self.__events.append(MoveEvent(list(self.__entities)[0].id, direction))
+        pygame.event.pump()

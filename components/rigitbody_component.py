@@ -4,7 +4,7 @@ class RigidbodyComponent:
             raise ValueError("Масса должна быть положительной")
         self.__mass = mass
         self.__friction = friction
-        self.__velocity = (0, 0)
+        self.__velocity = [0, 0]
 
     @property
     def mass(self):

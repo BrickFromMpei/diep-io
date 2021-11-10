@@ -12,7 +12,7 @@ class Entity:
         return self.__id
 
     def add_components(self, components):
-        self.__components = components
+        self.__components += components
 
     def remove_components(self, component):
         self.__components.remove(component)

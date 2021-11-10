@@ -14,7 +14,7 @@ class MoveEvent:
 
 class CollisionEvent:
     def __init__(self, entities_id):
-        self.entities_id = entities_id
+        self.__entities_id = entities_id
 
     @property
     def entities_id(self):
