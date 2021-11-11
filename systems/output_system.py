@@ -25,10 +25,11 @@ class OutputSystem:
     def update(self):
         self.__screen.fill((255, 255, 255))
         for entity in self.__entities:
+            size = entity.components[0].size
             pygame.draw.rect(self.__screen, (0, 0, 0),
-                             (int(entity.components[0].position[0]) - 5,
-                             int(entity.components[0].position[1]) - 5,
-                             10, 10)
+                             (int(entity.components[0].position[0]) - size[0],
+                             int(entity.components[0].position[1]) - size[1],
+                             size[0], size[1])
                              )
 
         pygame.display.flip()

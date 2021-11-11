@@ -18,7 +18,11 @@ class CollisionEvent:
 
     @property
     def entities_id(self):
-        return self.__entities_id
+        return self.__entities_id[:]
+
+
+class CollisionStartEvent(CollisionEvent):
+    pass
 
 
 class PositionUpdateEvent:
@@ -33,3 +37,17 @@ class PositionUpdateEvent:
     @property
     def entity_id(self):
         return self.__entity_id
+
+
+class FireEvent:
+    def __init__(self, entity_id, target):
+        self.__entity_id = entity_id
+        self.__target = target
+
+    @property
+    def entity_id(self):
+        return self.__entity_id
+
+    @property
+    def target(self):
+        return self.__target[:]

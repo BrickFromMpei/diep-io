@@ -1,4 +1,4 @@
-from events.events import CollisionEvent
+from events.events import CollisionEvent, CollisionStartEvent
 from filters.filter import ComponentFilter, EventFilter
 from components.transform_component import TransformComponent
 from components.collistion_component import CollisionComponent
@@ -29,13 +29,22 @@ class CollisionSystem:
         self.__events = events
 
     def update(self):
-        ids = []
+        collided = [x.id for x in self.__collision_filter(True)]
         for entity in self.__entities:
-            for entity2 in self.__entities:
+            entity.components[1].in_collision = False
+        for entity in self.__collision_filter(False):
+            for entity2 in self.__collision_filter(False):
                 # Искллючаем повторное добавление обной пары объектов
-                if entity.id == entity2.id or [entity2.id, entity.id] in ids:
+                if entity.id == entity2.id:
                     continue
                 if pair_collision(entity, entity2):
-                    ids.append([entity.id, entity2.id])
-        for x in ids:
-            self.__events.append(CollisionEvent([x[0], x[1]]))
+                    entity.components[1].in_collision = True
+                    entity2.components[0].in_collision = True
+                    if not (entity.id in collided or entity2.id in collided):
+                        self.__events.append(CollisionStartEvent([entity.id, entity2.id]))
+                    self.__events.append(CollisionEvent([entity.id, entity2.id]))
+
+    def __collision_filter(self, flag):
+        for entity in self.__entities:
+            if entity.components[1].in_collision == flag:
+                yield entity

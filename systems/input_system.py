@@ -1,5 +1,5 @@
 import pygame
-from events.events import MoveEvent
+from events.events import MoveEvent, FireEvent
 from filters.filter import ComponentFilter, EventFilter
 from components.input_component import InputComponent
 
@@ -26,4 +26,7 @@ class InputSystem:
             direction[1] += 1
         if direction != [0, 0]:
             self.__events.append(MoveEvent(list(self.__entities)[0].id, direction))
+        if pygame.mouse.get_pressed()[0]:
+            x, y = pygame.mouse.get_pos()
+            self.__events.append(FireEvent(list(self.__entities)[0].id, (x, y)))
         pygame.event.pump()
