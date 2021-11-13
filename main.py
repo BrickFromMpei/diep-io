@@ -1,4 +1,3 @@
-import pygame
 from components.collistion_component import CollisionComponent
 from components.damage_component import DamageComponent
 from components.fire_component import FireComponent

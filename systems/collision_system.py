@@ -3,7 +3,7 @@ from filters.filter import ComponentFilter, EventFilter
 from components.transform_component import TransformComponent
 from components.collistion_component import CollisionComponent
 
-
+# TODO неправильно определяеться время колизии для объектов разных рамеров
 def pair_collision(first_entity, second_entity):
     position1 = first_entity.components[0].position
     position2 = second_entity.components[0].position
