@@ -1,3 +1,4 @@
+# TODO переделать список сущностей на класс
 def find_by_id(items, identifier):
     for item in items:
         if item.id == identifier:

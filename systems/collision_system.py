@@ -3,17 +3,16 @@ from filters.filter import ComponentFilter, EventFilter
 from components.transform_component import TransformComponent
 from components.collistion_component import CollisionComponent
 
-# TODO неправильно определяеться время колизии для объектов разных рамеров
 def pair_collision(first_entity, second_entity):
     position1 = first_entity.components[0].position
     position2 = second_entity.components[0].position
     size1 = first_entity.components[1].size
     size2 = second_entity.components[1].size
     collide = []
-
     for i in range(len(position1)):  # Go throw all directions
-        if (position1[i] + size1[i] >= position2[i]) and \
-           (position1[i] <= position2[i] + size2[i]):
+        size = (size1[i] + size2[i]) / 2
+        if ((position1[i] + size >= position2[i]) and
+           (position1[i] <= position2[i] + size)):
             collide.append(True)
         else:
             collide.append(False)

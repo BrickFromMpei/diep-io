@@ -22,7 +22,7 @@ def build_engine():
     player = Entity(IdGenerator().get_next())
     transform = TransformComponent([20, 20])
     move = MoveComponent(100)
-    rigitbody = RigidbodyComponent(1, 1, 0.1)
+    rigitbody = RigidbodyComponent(1, 1)
     input = InputComponent()
     collision = CollisionComponent((10, 10))
     health = HealthComponent(500)
@@ -32,22 +32,22 @@ def build_engine():
 
     thing = Entity(IdGenerator().get_next())
     transform = TransformComponent([100, 100])
-    rigitbody = RigidbodyComponent(1, 1, 0.1)
+    rigitbody = RigidbodyComponent(1, 1)
     collision = CollisionComponent((10, 10))
     health = HealthComponent(100)
     thing.add_components([transform, rigitbody, collision, health])
 
     thing2 = Entity(IdGenerator().get_next())
-    transform = TransformComponent([150, 100])
-    rigitbody = RigidbodyComponent(1, 1, 0.1)
-    collision = CollisionComponent((10, 10))
+    transform = TransformComponent([150, 100], (20, 20))
+    rigitbody = RigidbodyComponent(1, 1)
+    collision = CollisionComponent((20, 20))
     health = HealthComponent(100)
     thing2.add_components([transform, rigitbody, collision, health])
 
     thing3 = Entity(IdGenerator().get_next())
-    transform = TransformComponent([150, 150])
-    rigitbody = RigidbodyComponent(1, 1, 0.1)
-    collision = CollisionComponent((10, 10))
+    transform = TransformComponent([150, 150], (20, 20))
+    rigitbody = RigidbodyComponent(1, 1)
+    collision = CollisionComponent((20, 20))
     health = HealthComponent(100)
     thing3.add_components([transform, rigitbody, collision, health])
 
@@ -59,19 +59,19 @@ def build_engine():
     engine.add_system(InputSystem)
     engine.add_system(FireSystem)
     engine.add_system(CollisionSystem)
-    engine.add_system(HealthSystem)
+    #engine.add_system(HealthSystem)
     engine.add_system(RigitbodySystem)
     engine.add_system(OutputSystem)
     return engine
 
 
 def fire_builder():
-    rigitbody = RigidbodyComponent(0.002, 0.01, 0.0)
-    collision = CollisionComponent([1, 1])
+    rigitbody = RigidbodyComponent(0.002, 0.01)
+    collision = CollisionComponent([2, 2])
     health = HealthComponent(100)
     damage = DamageComponent(50)
-    transform = TransformComponent([0, 0], (3, 3))
-    force = 700
+    transform = TransformComponent([0, 0], (2, 2))
+    force = 100
     cooldown = 1
     fire_component = FireComponent(rigitbody=rigitbody,
                                    collision=collision,

@@ -48,7 +48,7 @@ class FireSystem:
                 for i in range(len(position)):
                     # 10 это размер коллайдера объекта
                     # TODO: Переделать константу 10
-                    bullet_position.append(position[i] + delta_position[i]*10)
+                    bullet_position.append(position[i] + delta_position[i]*20)
 
                 transform = fire_component.transform
                 transform.position = bullet_position
