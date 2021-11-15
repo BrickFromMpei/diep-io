@@ -24,6 +24,7 @@ class FireSystem:
         self.__delta_time = 0.0
         self.__start_time = time.time()
 
+    # TODO Скорость выстрела зависит от FPS. Исправить
     def update(self):
         self.__delta_time = time.time() - self.__start_time
         self.__start_time = time.time()
@@ -64,7 +65,8 @@ class FireSystem:
 
                 force = fire_component.force
                 for i in range(len(delta_position)):
-                    accel = delta_position[i] * force / rigitbody.mass
-                    rigitbody.velocity[i] += accel * self.__delta_time  # TODO сделать глобальный таймер
+                    # Работает НЕ через ускорение, т.к приложенаая сила моментальна и не действует долговременно
+                    add_velocity = delta_position[i] * force / rigitbody.mass
+                    rigitbody.velocity[i] += add_velocity  # TODO сделать глобальный таймер
                 self.__all_entities.append(bullet)
                 fire_component.timer = fire_component.cooldown

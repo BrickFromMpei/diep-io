@@ -1,5 +1,5 @@
 class CollisionComponent:
-    def __init__(self, size: tuple[int, int]):
+    def __init__(self, size):
         self.__size = size
         self.in_collision = False
 
