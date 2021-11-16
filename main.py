@@ -45,11 +45,12 @@ def build_engine():
     thing2.add_components([transform, rigitbody, collision, health])
 
     thing3 = Entity(IdGenerator().get_next())
-    transform = TransformComponent([150, 150], (20, 20))
+    transform = TransformComponent([220, 200], (50, 10))
     rigitbody = RigidbodyComponent(1, 1)
-    collision = CollisionComponent((20, 20))
+    collision = CollisionComponent((50, 10))
     health = HealthComponent(100)
     thing3.add_components([transform, rigitbody, collision, health])
+
 
     engine.add_entity(player)
     engine.add_entity(thing)
@@ -71,7 +72,7 @@ def fire_builder():
     health = HealthComponent(100)
     damage = DamageComponent(50)
     transform = TransformComponent([0, 0], (2, 2))
-    force = 100
+    force = 0.3
     cooldown = 1
     fire_component = FireComponent(rigitbody=rigitbody,
                                    collision=collision,

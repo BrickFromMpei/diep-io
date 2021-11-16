@@ -11,7 +11,7 @@ class EventFilter:
 
     def __filter_events(self):
         for event in self.__events:
-            if type(event).__name__ in [x.__name__ for x in self.__types]:
+            if any([isinstance(event, x) for x in self.__types]):
                 yield event
 
 
@@ -35,7 +35,7 @@ class ComponentFilter:
         components_to_return = []
         for tp in self.__types:
             for component in components:
-                if type(component).__name__ == tp.__name__:
+                if isinstance(component, tp):
                     components_to_return.append(component)
         if len(components_to_return) == len(self.__types):
             return components_to_return
