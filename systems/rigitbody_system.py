@@ -84,10 +84,11 @@ class RigitbodySystem:
                 position_delta = vector_delta(
                     collided1[0].position, collided2[0].position
                 )
-                velocity = collided1[1].velocity
-                collided1[1].velocity = vector_sum(
-                    velocity, position_delta, self.__resistance
-                )
+                for elem in [collided1, collided2]:
+                    velocity = elem[1].velocity
+                    elem[1].velocity = vector_sum(
+                        velocity, position_delta, self.__resistance
+                    )
 
     def __collided_component(self, event):
         return [
