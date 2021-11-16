@@ -4,13 +4,8 @@ from events.events import CollisionEvent, MoveEvent, PositionUpdateEvent, Collis
 from components.move_component import MoveComponent
 from components.rigitbody_component import RigidbodyComponent
 from components.transform_component import TransformComponent
-from global_functions import find_by_id
+from global_functions import find_by_id, by_pair
 from vector_fuctions import *
-
-
-def set_new_velocities(collided, new_velocities):
-    for i in new_velocities:
-        collided[i][1].velocity = new_velocities[i]
 
 
 class RigitbodySystem:
@@ -74,59 +69,44 @@ class RigitbodySystem:
             coef = force/mass * self.__delta_time
             components[1].velocity = vector_sum(velocity, direction, coef)
 
-    ## TODO Переписать. Очень сложно!
     def __start_collide_processing(self):
         for event in self.__collide_start_events:
             collided = self.__collided_component(event)
-            new_velocities = {}
-            for i in range(len(collided)):
-                next_i = 0 if i == len(collided) - 1 else i + 1
-                normal_vector = normal(collided[i][0], collided[next_i][0])
-                velocity = collided[i][1].velocity
-                if vector_len(velocity) > 0:
-                    reflect_vector = reflect(velocity, normal_vector)
-                    mass = collided[i][1].mass
-                    next_mass = collided[next_i][1].mass
-                    mass_sum = mass + next_mass
-                    # Обмениваем импульсы между двумя столкнувшимися объектами
-                    for x in [i, next_i]:
-                        mass_coef = 1 - collided[x][1].mass/mass_sum
-                        new_velocity = self.__apply_reflect(
-                            reflect_vector, mass_coef, x, next_i
-                        )
-                        if x in new_velocities:
-                            for j in range(len(new_velocity)):
-                                new_velocities[x][j] += new_velocity[j]
-                        else:
-                            new_velocities[x] = new_velocity
-
-            set_new_velocities(collided, new_velocities)
+            for primary, secondary in by_pair(collided):
+                self.__reflect_velocity(primary, secondary)
 
     # Если объекты уже в состоянии коллизии,
     # то мы из выталкиваем друг от друга
     def __current_collide_processing(self):
         for event in self.__collide_events:
             collided = self.__collided_component(event)
-            for i in range(len(collided)):
-                next_i = 0 if i == len(collided) - 1 else i + 1
+            for collided1, collided2 in by_pair(collided):
                 position_delta = vector_delta(
-                    collided[i][0].position, collided[next_i][0].position
+                    collided1[0].position, collided2[0].position
                 )
-                velocity = collided[next_i][1].velocity
-                for j in range(len(velocity)):
-                    velocity[j] += position_delta[j] * self.__resistance
+                velocity = collided1[1].velocity
+                collided1[1].velocity = vector_sum(
+                    velocity, position_delta, self.__resistance
+                )
 
     def __collided_component(self, event):
-        return [x.components for x in self.__entities if x.id in event.entities_id]
+        return [
+            x.components for x in self.__entities if x.id in event.entities_id
+        ]
 
-    def __apply_reflect(self, reflect_vector, mass_coef, index, next_index):
-        coef = mass_coef * self.__collision_lost_coef
-        result_vector = []
-        for x in reflect_vector:
-            result_vector.append(
-                (-1) ** (next_index - index + 1) * x * coef
+    # Обмениваем импульсы между двумя столкнувшимися объектами
+    def __reflect_velocity(self, primary, secondary):
+        normal_vector = normal(primary[0], secondary[0])
+        mass_sum = primary[1].mass + secondary[1].mass
+        new_velocities = []
+        for x, y in zip([primary, secondary], [secondary, primary]):
+            mass = x[1].mass
+            coef = 1 - mass / mass_sum
+            velocity_sum = vector_sum(x[1].velocity, y[1].velocity, -1)
+            reflect_vector = reflect(velocity_sum, normal_vector)
+            new_velocities.append(
+                vector_multiply(reflect_vector, coef)
             )
-        return result_vector
-
-
+        for x, y in zip([primary, secondary], new_velocities):
+            x[1].velocity = y
 
