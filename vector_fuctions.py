@@ -36,7 +36,7 @@ def normal(transform1, transform2):
     for i in range(len(transform1.position)):
         size = transform1.size[i]/2 + transform2.size[i]/2
         pos_delta = round(transform1.position[i] - transform2.position[i])
-        if abs(pos_delta) != size:
+        if int(abs(pos_delta)) != int(size):
             normal_vector.append(0)
         else:
             if pos_delta > 0:

@@ -41,7 +41,7 @@ class RigitbodySystem:
 
     def __collide_processing(self):
         self.__start_collide_processing()
-        self.__current_collide_processing()
+        #self.__current_collide_processing()
 
     def __velocity_processing(self):
         for entity in self.__entities:

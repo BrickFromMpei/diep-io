@@ -2,24 +2,17 @@ from events.events import CollisionEvent, CollisionStartEvent
 from filters.filter import ComponentFilter, EventFilter
 from components.transform_component import TransformComponent
 from components.collistion_component import CollisionComponent
+from global_functions import is_intersection
 
 
 def pair_collision(first_entity, second_entity):
-    pos1 = first_entity.components[0].position
-    pos2 = second_entity.components[0].position
+    position1 = first_entity.components[0].position
+    position2 = second_entity.components[0].position
     size1 = first_entity.components[1].size
     size2 = second_entity.components[1].size
-    collide = []
-    for p1, p2, s1, s2 in zip(pos1, pos2, size1, size2):
-        collide.append(pair_collision_condition(p1, p2, s1, s2))
-    return all(collide)
-
-
-def pair_collision_condition(pos1, pos2, size1, size2):
-    size = (size1 + size2) / 2
-    if (pos1 + size >= pos2) and (pos1 <= pos2 + size):
-        return True
-    return False
+    return is_intersection(
+        position1, position2, size1, size2
+    )
 
 
 class CollisionSystem:

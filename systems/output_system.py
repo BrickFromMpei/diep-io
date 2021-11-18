@@ -1,12 +1,13 @@
 import pygame
+
+import config
 from components.transform_component import TransformComponent
 from filters.filter import ComponentFilter, EventFilter
 
 
-
 def init_screen():
     background_colour = (255, 255, 255)
-    (width, height) = (700, 700)
+    (width, height) = config.FIELD_SIZE
     screen = pygame.display.set_mode((width, height))
     screen.fill(background_colour)
     pygame.display.flip()
