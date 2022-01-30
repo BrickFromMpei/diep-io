@@ -1,11 +1,14 @@
+import asyncio
 from engine_builder import EngineBuilder
 
 
-def start():
+async def start():
     builder = EngineBuilder()
-    ecs_engine = builder.build()
-    ecs_engine.run()
+    ecs_engine = await builder.build()
+    await ecs_engine.run()
 
 
 if __name__ == "__main__":
-    start()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(start())
+    loop.run_forever()

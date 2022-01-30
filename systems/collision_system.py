@@ -3,6 +3,7 @@ from filters.filter import ComponentFilter, EventFilter
 from components.transform_component import TransformComponent
 from components.collistion_component import CollisionComponent
 from global_functions import is_intersection
+from systems.isystem import ISystem
 
 
 def pair_collision(first_entity, second_entity):
@@ -15,7 +16,7 @@ def pair_collision(first_entity, second_entity):
     )
 
 
-class CollisionSystem:
+class CollisionSystem(ISystem):
     def __init__(self, entities, events):
         self.__entities = ComponentFilter(
             entities,

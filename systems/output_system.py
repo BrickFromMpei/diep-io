@@ -3,6 +3,7 @@ import pygame
 import config
 from components.transform_component import TransformComponent
 from filters.filter import ComponentFilter, EventFilter
+from systems.isystem import ISystem
 
 
 def init_screen():
@@ -14,7 +15,7 @@ def init_screen():
     return screen
 
 
-class OutputSystem:
+class OutputSystem(ISystem):
     def __init__(self, entities, events):
         self.__entities = ComponentFilter(
             entities,

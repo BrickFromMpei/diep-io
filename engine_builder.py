@@ -3,7 +3,6 @@ import random
 from global_functions import is_intersection
 from components.collistion_component import CollisionComponent
 from components.damage_component import DamageComponent
-from components.fire_component import FireComponent
 from components.health_component import HealthComponent
 from ecs_engine import ECSEngine
 from entities.entity import Entity
@@ -13,8 +12,6 @@ from systems.fire_system import FireSystem
 from systems.health_system import HealthSystem
 from systems.input_system import InputSystem
 from systems.output_system import OutputSystem
-from components.move_component import MoveComponent
-from components.input_component import InputComponent
 from systems.rigitbody_system import RigitbodySystem
 from components.rigitbody_component import RigidbodyComponent
 from components.transform_component import TransformComponent
@@ -27,10 +24,9 @@ class EngineBuilder:
     def __init__(self):
         self.__engine = ECSEngine()
 
-    def build(self):
+    async def build(self):
         self.__add_obstacles()
-        self.__add_player()
-        self.__add_systems()
+        await self.__add_systems()
         return self.__engine
 
     def __add_obstacles(self):
@@ -88,47 +84,12 @@ class EngineBuilder:
         )
         return obstacle
 
-    def __add_systems(self):
-        self.__engine.add_system(InputSystem)
-        self.__engine.add_system(FireSystem)
-        self.__engine.add_system(CollisionSystem)
-        self.__engine.add_system(HealthSystem)
-        self.__engine.add_system(RigitbodySystem)
-        self.__engine.add_system(OutputSystem)
+    async def __add_systems(self):
+        await self.__engine.add_system(InputSystem)
+        await self.__engine.add_system(FireSystem)
+        await self.__engine.add_system(CollisionSystem)
+        await self.__engine.add_system(HealthSystem)
+        await self.__engine.add_system(RigitbodySystem)
+        await self.__engine.add_system(OutputSystem)
 
-    def __add_player(self):
-        player = self.__create_player()
-        self.__engine.add_entity(player)
 
-    def __create_player(self):
-        player = Entity(IdGenerator().get_next())
-        transform = TransformComponent([10,10], config.PLAYER_SIZE)
-        move = MoveComponent(config.PLAYER_MOVE_FORCE)
-        rigitbody = RigidbodyComponent(config.PLAYER_MASS, config.FRICTION)
-        input = InputComponent()
-        collision = CollisionComponent(config.PLAYER_SIZE)
-        health = HealthComponent(config.PLAYER_HEALTH)
-        damage = DamageComponent(config.PLAYER_BODY_DAMAGE)
-        fire = self.__create_fire()
-        player.add_components(
-            [transform, move, input, rigitbody,
-             collision, health, damage, fire]
-        )
-        return player
-
-    def __create_fire(self):
-        rigitbody = RigidbodyComponent(0.002, 0.01)
-        collision = CollisionComponent(config.BULLET_SIZE)
-        health = HealthComponent(2)
-        damage = DamageComponent(50)
-        transform = TransformComponent([0, 0], config.BULLET_SIZE)
-        force = 0.3
-        cooldown = 1
-        fire_component = FireComponent(rigitbody=rigitbody,
-                                       collision=collision,
-                                       health=health,
-                                       damage=damage,
-                                       force=force,
-                                       cooldown=cooldown,
-                                       transform=transform)
-        return fire_component

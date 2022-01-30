@@ -6,9 +6,10 @@ from events.events import FireEvent
 from filters.filter import ComponentFilter, EventFilter
 from global_functions import find_by_id
 from id_generator import IdGenerator
+from systems.isystem import ISystem
 
 
-class FireSystem:
+class FireSystem(ISystem):
     def __init__(self, entities, events):
         self.__entities = ComponentFilter(
             entities,

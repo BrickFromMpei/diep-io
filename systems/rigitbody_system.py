@@ -5,10 +5,11 @@ from components.move_component import MoveComponent
 from components.rigitbody_component import RigidbodyComponent
 from components.transform_component import TransformComponent
 from global_functions import find_by_id, by_pair
+from systems.isystem import ISystem
 from vector_fuctions import *
 
 
-class RigitbodySystem:
+class RigitbodySystem(ISystem):
     def __init__(self, entities, events):
         self.__entities = ComponentFilter(
             entities,
