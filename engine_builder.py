@@ -1,5 +1,6 @@
 import config
 import random
+from proxio.websocket_proxy import WebsocketProxy
 from global_functions import is_intersection
 from components.collistion_component import CollisionComponent
 from components.damage_component import DamageComponent
@@ -24,9 +25,10 @@ class EngineBuilder:
     def __init__(self):
         self.__engine = ECSEngine()
 
-    async def build(self):
+    def build(self):
         self.__add_obstacles()
-        await self.__add_systems()
+        self.__add_systems()
+        self.__add_proxy()
         return self.__engine
 
     def __add_obstacles(self):
@@ -84,12 +86,16 @@ class EngineBuilder:
         )
         return obstacle
 
-    async def __add_systems(self):
-        await self.__engine.add_system(InputSystem)
-        await self.__engine.add_system(FireSystem)
-        await self.__engine.add_system(CollisionSystem)
-        await self.__engine.add_system(HealthSystem)
-        await self.__engine.add_system(RigitbodySystem)
-        await self.__engine.add_system(OutputSystem)
+    def __add_systems(self):
+        self.__engine.add_system(InputSystem)
+        self.__engine.add_system(FireSystem)
+        self.__engine.add_system(CollisionSystem)
+        self.__engine.add_system(HealthSystem)
+        self.__engine.add_system(RigitbodySystem)
+        self.__engine.add_system(OutputSystem)
+
+    def __add_proxy(self):
+        proxy = WebsocketProxy()
+        self.__engine.add_proxy(proxy)
 
 

@@ -3,10 +3,9 @@ from components.health_component import HealthComponent
 from events.events import CollisionEvent, CollisionStartEvent
 from filters.filter import ComponentFilter, EventFilter
 from global_functions import find_by_id
-from systems.isystem import ISystem
 
 
-class HealthSystem(ISystem):
+class HealthSystem:
     def __init__(self, entities, events):
         self.__all_entities = entities
         self.__entities_with_health = ComponentFilter(

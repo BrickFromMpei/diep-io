@@ -4,7 +4,7 @@ from engine_builder import EngineBuilder
 
 async def start():
     builder = EngineBuilder()
-    ecs_engine = await builder.build()
+    ecs_engine = builder.build()
     await ecs_engine.run()
 
 
